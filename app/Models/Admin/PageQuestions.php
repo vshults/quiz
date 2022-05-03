@@ -137,11 +137,13 @@ class PageQuestions extends Model
                     'stage'     => $questions->stage,
                     'type'      => $questions->type,
                     'required'  => $questions->required,
+                    'branch_id'  => $questions->branch_id,
                 ];
             })->collapse()->toArray();
 
         //получаем prev
-        $prev                   = $this->answers->where('branch_id', $question['id'])->pluck('question_id')->toArray();
+        $prev                   = $this->answers->where('branch_id', $question['id'])->pluck('question_id')->toArray() ?: $this->questions->where('branch_id', $question['id'])->pluck('id')->toArray();
+
         $branch                 = $this->questions->where('id',$prev[0])->pluck('branch')->toArray();
         $question['prev']       = !empty($prev) && $branch[0] ? $prev[0] : SITE . '/admin/host/edit/questions/' . $question['host_id'];
         //получаем ответы
@@ -202,6 +204,22 @@ class PageQuestions extends Model
         );
     }
 
+    public function addBranchQuestion($id, $hostID)
+    {
+
+        $this->questions->insert([['branch' => 1, 'host_id' => $hostID]]);
+
+        $result = $this->questions->where([['host_id', $hostID], ['branch', 1]])->orderBy('id', 'DESC')->limit(1)->get()->toArray();
+
+        $branchID = (int)$result[0]['id'];
+
+        $this->questions->where('id', $id)->update(
+            [
+                'branch_id' => $branchID
+            ]
+        );
+    }
+
     public function deleteQuestion($id)
     {
         $this->questions->where('id', $id)->delete();
@@ -232,6 +250,35 @@ class PageQuestions extends Model
 
         deleteAll();
     }
+
+    public function deleteBranchQuestion($id)
+    {
+
+        $answers   = $this->answers->where([['question_id', $id], ['branch_id', '!=', null]])->pluck('branch_id')->toArray();
+
+        $questions = $this->questions->where('branch_id', $id)->pluck('branch_id')->toArray();
+
+        if(!empty($answers)){
+            foreach ($answers as $branch) {
+                $this->questions->where('id', $branch)->delete();
+                $this->answers->where('question_id', $branch)->delete();
+            }
+        }
+
+        $this->answers->where('question_id', $id)->delete();
+
+        if(!empty($questions)){
+            foreach ($questions as $branch) {
+                $this->questions->where('id', $branch)->delete();
+                $this->answers->where('question_id', $branch)->delete();
+            }
+        }
+
+        $this->questions->where('id', $id)->delete();
+
+        deleteAll();
+    }
+
 
     public function deleteQuestionImage($id){
 

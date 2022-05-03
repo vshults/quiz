@@ -269,6 +269,32 @@ function addBranch(url) {
     });
 }
 
+function addBranchQuestion(url) {
+
+    $(document).on('click', '.add_branch_question', function () {
+
+        let id = $(this).attr('data-id')
+        let hostID = $(this).attr('data-hostID')
+        let selectionID = $(this).attr('data-selection-id')
+
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: {
+                id: id,
+                hostID: hostID,
+                selectionID: selectionID,
+            },
+            success() {
+
+            }
+        }).then(() => {
+            location.reload();
+
+        })
+    });
+}
+
 function addQuestion(url) {
 
     $(document).on('click', '.add_question', function () {
@@ -362,6 +388,28 @@ function deleteAnswer(url) {
 function deleteBranch(url) {
 
     $(document).on('click', '.delete_branch', function () {
+
+        let id = $(this).attr('data-id')
+
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: {
+                id: id,
+            },
+            success() {
+
+            }
+        }).then(() => {
+            location.reload();
+
+        })
+    });
+}
+
+function deleteBranchQuestion(url) {
+
+    $(document).on('click', '.delete_branch_question', function () {
 
         let id = $(this).attr('data-id')
 

@@ -178,12 +178,20 @@ class HostController extends Controller
     public function addBranch(Request $request)
     {
         $request = $request->all();
-        $hostID = (int)$request['hostID'];
-        $id = (int)$request['id'];
+        $hostID  = (int)$request['hostID'];
+        $id      = (int)$request['id'];
 
-        if (!empty($id)) {
-            $this->pageQuestions->addBranch($id, $hostID);
-        }
+        $this->pageQuestions->addBranch($id, $hostID);
+
+    }
+
+    public function addBranchQuestion(Request $request)
+    {
+        $request     = $request->all();
+        $hostID      = (int)$request['hostID'];
+        $id          = (int)$request['id'];
+
+        $this->pageQuestions->addBranchQuestion($id, $hostID);
 
     }
 
@@ -207,6 +215,13 @@ class HostController extends Controller
         $id = (int)$request['id'];
 
         $this->pageQuestions->deleteBranch($id);
+    }
+
+    public function deleteBranchQuestion(Request $request)
+    {
+        $id = (int)$request['id'];
+
+        $this->pageQuestions->deleteBranchQuestion($id);
     }
 
     public function editQuestion(Request $request)

@@ -67,6 +67,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware' => 'admin'
 
     Route::match(['get', 'post'], '/host/question/add/branch', 'HostController@addBranch');
 
+    Route::match(['get', 'post'], '/host/question/add/branchQuestion', 'HostController@addBranchQuestion');
+
     /**
         HostController Delete
      */
@@ -78,6 +80,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware' => 'admin'
     Route::match(['get', 'post'], '/host/answer/delete', 'HostController@deleteAnswer');
 
     Route::match(['get', 'post'], '/host/branch/delete', 'HostController@deleteBranch');
+
+    Route::match(['get', 'post'], '/host/branchQuestion/delete', 'HostController@deleteBranchQuestion');
 
     Route::match(['get', 'post'], '/host/answer/deleteAnswerImage', 'HostController@deleteAnswerImage');
 

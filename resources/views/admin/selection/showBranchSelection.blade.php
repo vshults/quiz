@@ -90,7 +90,7 @@
                                             </form>
                                             @if(!empty($answer['img']))
                                                 <div class="image_anwer">
-                                                    <a href="{{$answer['img']}}" data-fancybox data-caption="{{$answer['answer']}}"><img style="width: 75px;height: 75px;" src="{{$answer['img']}}" class=""></a>
+                                                    <a href="{{$answer['img']}}" data-fancybox data-caption="{{$answer['answer']}}"><img style="width: 100px;height: 75px;" src="{{$answer['img']}}" class=""></a>
                                                     <i class="fa fa-times deleteAnswerImage" onclick=" deleteAnswerImage('{{SITE . '/admin/host/answer/deleteAnswerImage'}}')" data-id="{{$answer['id']}}" aria-hidden="true"></i>
                                                 </div>
                                             @endif

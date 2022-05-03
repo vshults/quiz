@@ -47,6 +47,8 @@ class VerifyCsrfToken extends Middleware
         '/admin/user/delete',
         '/admin/sortQuestions',
         '/admin/host/answer/deleteAnswerImage',
-        '/admin/host/question/deleteQuestionImage'
+        '/admin/host/question/deleteQuestionImage',
+        '/admin/host/question/add/branchQuestion',
+        '/admin/host/branchQuestion/delete'
     ];
 }

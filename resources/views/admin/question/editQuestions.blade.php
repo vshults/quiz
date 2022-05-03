@@ -76,7 +76,7 @@
                                 <h5 class="mb-0 js-edit-question_title">
                                     <label>Вопрос</label>
                                     <button class="btn btn-link" type="button">
-                                        <input type="text" data-id="{{$question['id']}}" data-name="title" class="form-control inp"  value="{{$question['title']}}"> <a href="{{$edit . $question['id'] . '/edit'}}"><button type="button" class="btn btn-secondary edit_qiestion">Редактировать</button></a> <button data-id="{{$question['id']}}" type="button" class="btn btn-danger delete_question">Удалить вопрос</button>
+                                        <input type="text" data-id="{{$question['id']}}" data-name="title" class="form-control inp"  value="{{$question['title']}}"> <a href="{{$edit . $question['id'] . '/edit'}}"><button type="button" class="btn btn-secondary edit_qiestion">Редактировать</button></a> <button data-id="{{$question['id']}}" type="button" class="btn btn-danger delete_question">Удалить вопрос</button>@if(!empty($question['branch_id']))  <a href="{{SITE . '/admin/host/' . $question['host_id'] . '/question/' . $question['branch_id']}}"><button type="button" class="btn btn-secondary show_branch">Посмотреть ветку</button></a> <button type="button" data-id="{{$question['branch_id']}}" class="btn btn-danger delete_branch_question">Удалить ветку</button> @else  @if(trim(strtolower($question['type'] !== 'radio')))  <a><button data-id="{{$question['id']}}" data-selection-id="{{!empty($host['selection_id']) ? $host['selection_id'] : ''}}" data-hostID="{{$hostID}}" type="button" class="btn btn-secondary add_branch_question">Добавить ветку</button></a> @endif @endif
                                     </button>
                                 </h5>
                             </div>
@@ -105,7 +105,7 @@
                                                 </form>
                                                 @if(!empty($answer['img']))
                                                    <div class="image_answer">
-                                                       <a href="{{$answer['img']}}" data-fancybox data-caption="{{$answer['answer']}}"><img style="width: 75px;height: 75px;" src="{{$answer['img']}}" class=""></a>
+                                                       <a href="{{$answer['img']}}" data-fancybox data-caption="{{$answer['answer']}}"><img style="width: 100px;height: 75px;" src="{{$answer['img']}}" class=""></a>
                                                        <i class="fa fa-times deleteAnswerImage" onclick=" deleteAnswerImage('{{SITE . '/admin/host/answer/deleteAnswerImage'}}')" data-id="{{$answer['id']}}" aria-hidden="true"></i>
                                                    </div>
                                                 @endif

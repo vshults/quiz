@@ -162,6 +162,7 @@ class PageHost extends Model
 
     public function saveSelection($hostID,$selectionID){
         $this->hostID = $hostID;
+
         $selectionID  = !empty($selectionID) ? (int)$selectionID : null;
 
         $this->hosts->where('id',(int)$hostID)->update([
@@ -205,12 +206,38 @@ class PageHost extends Model
                     'img'           => $question->img,
                     'type'          => $question->type,
                     'required'      => $question->required,
+                    'branch_id'     => $question->branch_id,
                 ];
             })->toArray();
 
+
+
             $branch_keys   = [];
             //дублируем вопросы и ответы к ним
-            foreach ($questions_selections as $question_selection){
+            foreach ($questions_selections as $question_selection) {
+
+                //дублируем ветки вопросов
+                if (!empty($question_selection['branch_id'])){
+                    $question_branch = $this->questions->where([['id', (int)$question_selection['branch_id']],['selection_id',$selectionID],['host_id',null]])->get()->toArray();
+                    $branch_id = $question_branch[0]['id'];
+                    $question_branch[0]['updated_at'] = null;
+                    $question_branch[0]['host_id']    = $hostID;
+                    unset($question_branch[0]['id']);
+                    $this->questions->insert($question_branch);
+                    $branch = $this->questions->orderBy('id','DESC')->limit(1)->get()->pluck('id')->toArray();
+                    $question_selection['branch_id'] = $branch[0];
+                    //дублируем ответы
+                    $answers = $this->answers->where('question_id',(int)$branch_id)->get()->toArray();
+                       foreach ($answers as $answer){
+                           unset($answer['id']);
+                           $answer['question_id'] = $branch[0];
+                           $answer['host_id']     = $this->hostID;
+                           $answer['selection']   = 0;
+                           $answer['updated_at']  = null;
+                           $this->answers->insert($answer);
+                       }
+                }
+
                 $answers = $this->answers->where('question_id', $question_selection['id'])->get()->toArray();
                 $id = $question_selection['id'];
                 unset($question_selection['id']);

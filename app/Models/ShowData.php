@@ -88,14 +88,15 @@ class ShowData extends Model
                 $question  = $this->questions->where([['host_id',$hostID],['branch',0]])->orderBy('index')->limit(1)->get()
                 ->map(function (Questions $questions) {
                     return [
-                            'index'     => $this->index,
-                            'id'        => $questions->id,
-                            'title'     => $questions->title,
-                            'img'       => !empty($questions->img) ? Storage::disk('s3')->url($questions->img)  : '' ,
-                            'stage'     => $questions->stage,
-                            'type'      => $questions->type,
-                            'required'  => $questions->required,
-                            'sort_order'=> $questions->index,
+                            'index'              => $this->index,
+                            'id'                 => $questions->id,
+                            'title'              => $questions->title,
+                            'img'                => !empty($questions->img) ? Storage::disk('s3')->url($questions->img)  : '' ,
+                            'stage'              => $questions->stage,
+                            'type'               => $questions->type,
+                            'required'           => $questions->required,
+                            'sort_order'         => $questions->index,
+                            'questionBranchID'   => $questions->branch_id,
                     ];
                 })->collapse()->toArray();
         } else {
@@ -104,14 +105,15 @@ class ShowData extends Model
                 $question = $this->questions->where([['index', '>', (int)$sortOrder],['host_id', $hostID],['branch',0]])->orderBy('index')->limit(1)->get()
                     ->map(function (Questions $questions) {
                         return [
-                            'index'     => $this->index,
-                            'id'        => $questions->id,
-                            'title'     => $questions->title,
-                            'img'       => !empty($questions->img) ? Storage::disk('s3')->url($questions->img)  : '' ,
-                            'stage'     => $questions->stage,
-                            'type'      => $questions->type,
-                            'required'  => $questions->required,
-                            'sort_order'=> $questions->index,
+                            'index'              => $this->index,
+                            'id'                 => $questions->id,
+                            'title'              => $questions->title,
+                            'img'                => !empty($questions->img) ? Storage::disk('s3')->url($questions->img)  : '' ,
+                            'stage'              => $questions->stage,
+                            'type'               => $questions->type,
+                            'required'           => $questions->required,
+                            'sort_order'         => $questions->index,
+                            'questionBranchID'   => $questions->branch_id,
                         ];
                     })->collapse()->toArray();
             }
@@ -181,16 +183,17 @@ class ShowData extends Model
         $questions  = $this->questions->where([['host_id',$hostID],['id',$prevQuestion]])->get()
             ->map(function (Questions $questions) {
                 return [
-                    'index'      => $this->index,
-                    'flag'       => $this->flag,
-                    'id'         => $questions->id,
-                    'title'      => $questions->title,
-                    'required'   => $this->required,
-                    'stage'      => $questions->stage,
-                    'type'       => $questions->type,
-                    'branch'     => $questions->branch,
-                    'sort_order' => $this->sort_order,
-                    'img'        => !empty($questions->img) ? Storage::disk('s3')->url($questions->img)  : '' ,
+                    'index'                   => $this->index,
+                    'flag'                    => $this->flag,
+                    'id'                      => $questions->id,
+                    'title'                   => $questions->title,
+                    'required'                => $this->required,
+                    'stage'                   => $questions->stage,
+                    'type'                    => $questions->type,
+                    'branch'                  => $questions->branch,
+                    'sort_order'              => $this->sort_order,
+                    'img'                     => !empty($questions->img) ? Storage::disk('s3')->url($questions->img)  : '' ,
+                    'questionBranchID'        => $this->branch_id,
                 ];
             })->toArray();
 
@@ -250,16 +253,17 @@ class ShowData extends Model
         $this->index            = $index + 1;
         $this->sort_order       = $sortOrder;
 
-        $results =  $this->questions->where([['id',$branchID],['host_id',$hostID]])->get()->map(function (Questions $branch) {
+        $results =  $this->questions->where([['id',(int)$branchID],['host_id',$hostID]])->get()->map(function (Questions $branch) {
             return [
-                'index'         => $this->index,
-                'flag'          => (int)$this->sort_order,
-                'required'      => $branch->required,
-                'id'            => $branch->id,
-                'title'         => $branch->title,
-                'stage'         => $branch->stage,
-                'img'           => !empty($branch->img) ? Storage::disk('s3')->url($branch->img)  : '' ,
-                'type'          => $branch->type,
+                'index'                  => $this->index,
+                'flag'                   => (int)$this->sort_order,
+                'required'               => $branch->required,
+                'id'                     => $branch->id,
+                'title'                  => $branch->title,
+                'stage'                  => $branch->stage,
+                'img'                    => !empty($branch->img) ? Storage::disk('s3')->url($branch->img)  : '' ,
+                'type'                   => $branch->type,
+                'questionBranchID'       => $branch->branch_id,
             ];})->toArray();
 
         if(!empty($results)){

@@ -1,3 +1,4 @@
+
 <?php $__env->startSection('content'); ?>
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -7,7 +8,7 @@
                 position: relative;
                 cursor: pointer;
                 font-size: 24px;
-                bottom: 225px;
+                bottom: 111px;
                 top: auto;
             }
         </style>

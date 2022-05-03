@@ -67,11 +67,12 @@ class QuizController extends Controller
         $request   = $request->all();
 
         //проверяем есть ли у нас такой домен
-        $host      = !empty($request['host']) ? $request['host'] : null;
-        $hostID    = $this->model->hostAccessStatus($host);
-        $branchID  = !empty($request['branchID']) ? $request['branchID'] : null;
-        $index     = !empty($request['index']) ? $request['index'] : 0;
-        $sortOrder = isset($request['sort_order']) ? $request['sort_order'] : null;
+        $host              = !empty($request['host']) ? $request['host'] : null;
+        $hostID            = $this->model->hostAccessStatus($host);
+        $branchID          = !empty($request['branchID']) ? $request['branchID'] : null;
+        $questionBranchID  = !empty($request['questionBranchID']) ? $request['questionBranchID'] : null;
+        $index             = !empty($request['index']) ? $request['index'] : 0;
+        $sortOrder         = isset($request['sort_order']) ? $request['sort_order'] : null;
         //проверяем есть ли у нас готовые вопросы к этому домену
 
         if ($this->model->hostQuestionsStatus($hostID)) {
@@ -98,11 +99,15 @@ class QuizController extends Controller
                 $sortOrder = $flag;
             }
 
-            //получаем вопросы
-            $data = $this->model->getQuestion($questionID, $hostID, $index,$sortOrder,$flag);
             //получаем вопросы, если попался ответ с веткой
             if (!empty($branchID)) {
                 $data = $this->model->getBranch($questionID, $branchID, $hostID, $index, $this->ticketID,$sortOrder);
+            }else if (!empty($questionBranchID)){
+                //если нет бранчей от ответа, но есть бранч на вопросе, то получаем его
+                $data = $this->model->getBranch($questionID, $questionBranchID, $hostID, $index, $this->ticketID,$sortOrder);
+            }else{
+                //получаем вопросы
+                $data = $this->model->getQuestion($questionID, $hostID, $index,$sortOrder,$flag);
             }
             //получаем актуальное количество вопросов
             if (is_null($this->ticketID)) {

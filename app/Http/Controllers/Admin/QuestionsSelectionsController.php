@@ -162,10 +162,9 @@ class QuestionsSelectionsController extends Controller
         $request             = $request->all();
         $selectionID         = (int)$request['selectionID'];
         $id                  = (int)$request['id'];
+        $type                = $request['type'];
 
-        if (!empty($id)) {
-            $this->pageQuestionsSelections->addBranchSelection($id, $selectionID);
-        }
+        $this->pageQuestionsSelections->addBranchSelection($id, $selectionID,$type);
 
     }
 

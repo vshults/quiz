@@ -18,7 +18,8 @@ class Questions extends Model
         'img',
         'type',
         'required',
-        'selection_id'
+        'selection_id',
+        'branch_id'
     ];
 
     public function answers()

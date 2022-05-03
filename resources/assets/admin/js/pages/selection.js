@@ -167,12 +167,14 @@ function addBranchSelection(url){
 
         let id = $(this).attr('data-id')
         let selectionID = $(this).attr('data-selectionID')
+        let type = $(this).attr('data-type')
 
         $.ajax({
             url: url,
             type: 'post',
             data: {
                 id: id,
+                type:type,
                 selectionID: selectionID,
             },
             success() {

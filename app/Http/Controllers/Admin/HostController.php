@@ -39,7 +39,7 @@ class HostController extends Controller
     public function addHost(Request $request)
     {
         $request->validate([
-            'domen' => 'required|unique:hosts,domen',
+            'domen'  => 'required|unique:hosts,domen',
         ]);
 
         $request = $request->all();

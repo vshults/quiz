@@ -19,8 +19,9 @@ $('.todo-list').sortable({
 
 function handleReorderElements()
 {
-    var url = '/admin/sortQuestions';
-    //var fieldData = $('.connectedSortable').sortable( "serialize" );
+    var url = '{{$sortQuestions}}';
+    var fieldData = $('.connectedSortable').sortable( "serialize" );
+    fieldData += "&action=reorderElements";
 
     var posting = $.post( url, fieldData);
     posting.done( function( data)

@@ -69,41 +69,94 @@
                             </div>
                             @if(!empty($question['answers']))
                                 @foreach($question['answers'] as $answer)
-                                    <div id="collapse{{$question['id']}}" class="collapse show" aria-labelledby="heading{{$question['id']}}" data-parent="#accordion{{$question['id']}}">
-                                        <div class="card-body"  data-toggle="collapse">
-                                            <label>Ответ</label><div class="flex_answer js-edit-answer"><input data-answer="true" data-id="{{$answer['id']}}" data-name="answer" type="text" value="{{$answer['answer']}}" class="form-control inp"> @if(!empty($answer['branch_id']))  <a href="{{SITE . '/admin/host/' . $question['host_id'] . '/question/' . $answer['branch_id']}}"><button type="button" class="btn btn-secondary show_branch">Посмотреть ветку</button></a> <button type="button" data-id="{{$answer['id']}}" class="btn btn-danger delete_branch">Удалить ветку</button> @else  @if(trim(strtolower($question['type'] === 'radio')))  <a><button data-id="{{$answer['id']}}" data-selection-id="{{!empty($host['selection_id']) ? $host['selection_id'] : ''}}" data-hostID="{{$hostID}}" type="button" class="btn btn-secondary add_branch">Добавить ветку</button></a> @endif @endif <button type="button" data-id="{{$answer['id']}}" class="btn btn-danger delete_answer">Удалить ответ</button></a></div>
-                                        </div>
-                                        <br>
-                                        <div class="image_block_answer">
-                                            <form id="imageAnswer" class="form-group imageAnswerUpload" data-id="{{$answer['id']}}" method="POST" enctype="multipart/form-data" data-name="image_answer" >
-                                                <button type="button"
-                                                        class="product-photos__item product-photos__item--add fas image_answer fa-plus"
-                                                        title="Крестик крутится, картинка грузится">
-                                                    <input type="file" class="button__input"
-                                                           data-answer="true"
-                                                           data-id="{{$answer['id']}}"
-                                                           id="imageAnswer"
-                                                           name="image_answer"
-                                                           accept=".jpg, .jpeg, .png, .webp, .heif"
-                                                           multiple>
-                                                </button>
-                                            </form>
-                                            @if(!empty($answer['img']))
-                                                <div class="image_answer">
-                                                    <a href="{{$answer['img']}}" data-fancybox data-caption="{{$answer['answer']}}"><img style="width: 100px;height: 75px;" src="{{$answer['img']}}" class=""></a>
-                                                    <i class="fa fa-times deleteAnswerImage" onclick=" deleteAnswerImage('{{SITE . '/admin/host/answer/deleteAnswerImage'}}')" data-id="{{$answer['id']}}" aria-hidden="true"></i>
-                                                </div>
-                                            @endif
-                                        </div>
+                                    @if(trim($question['type']) === 'radio' || trim($question['type']) === 'checkbox')
+                                        <div id="collapse{{$question['id']}}" class="collapse show" aria-labelledby="heading{{$question['id']}}" data-parent="#accordion{{$question['id']}}">
+                                            <div class="card-body"  data-toggle="collapse">
+                                                <label>Ответ</label><div class="flex_answer js-edit-answer"><input data-answer="true" data-id="{{$answer['id']}}" data-name="answer" type="text" value="{{$answer['answer']}}" class="form-control inp"> @if(!empty($answer['branch_id']))  <a href="{{SITE . '/admin/host/' . $question['host_id'] . '/question/' . $answer['branch_id']}}"><button type="button" class="btn btn-secondary show_branch">Посмотреть ветку</button></a> <button type="button" data-id="{{$answer['id']}}" class="btn btn-danger delete_branch">Удалить ветку</button> @else  @if(trim(strtolower($question['type'] === 'radio')))  <a><button data-id="{{$answer['id']}}" data-selection-id="{{!empty($host['selection_id']) ? $host['selection_id'] : ''}}" data-hostID="{{$hostID}}" type="button" class="btn btn-secondary add_branch">Добавить ветку</button></a> @endif @endif <button type="button" data-id="{{$answer['id']}}" class="btn btn-danger delete_answer">Удалить ответ</button></a></div>
+                                            </div>
+                                            <br>
+                                            <div class="image_block_answer">
+                                                <form id="imageAnswer" class="form-group imageAnswerUpload" data-id="{{$answer['id']}}" method="POST" enctype="multipart/form-data" data-name="image_answer" >
+                                                    <button type="button"
+                                                            class="product-photos__item product-photos__item--add fas image_answer fa-plus"
+                                                            title="Крестик крутится, картинка грузится">
+                                                        <input type="file" class="button__input"
+                                                               data-answer="true"
+                                                               data-id="{{$answer['id']}}"
+                                                               id="imageAnswer"
+                                                               name="image_answer"
+                                                               accept=".jpg, .jpeg, .png, .webp, .heif"
+                                                               multiple>
+                                                    </button>
+                                                </form>
+                                                @if(!empty($answer['img']))
+                                                    <div class="image_answer">
+                                                        <a href="{{$answer['img']}}" data-fancybox data-caption="{{$answer['answer']}}"><img style="width: 100px;height: 75px;" src="{{$answer['img']}}" class=""></a>
+                                                        <i class="fa fa-times deleteAnswerImage" onclick=" deleteAnswerImage('{{SITE . '/admin/host/answer/deleteAnswerImage'}}')" data-id="{{$answer['id']}}" aria-hidden="true"></i>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                         @endif
                                         @endforeach
                                         @else
                                             @if(!empty($question['answers']))
                                                 <button type="button" class="btn btn-secondary add_branch">Добавить ветку</button>
                                             @endif
                                         @endif
-                                        <br>
-                                        <button type="button" data-id="{{$question['id']}}" class="btn btn-primary  add_answer">Добавить ответ</button>
-                                    </div>
+                                        @if(trim($question['type']) === 'select')
+                                            @if(!empty($question['answers']))
+                                                <div style="margin-left: 1%;margin-top: 1%;">
+                                                    <label>Значение в селекторе</label>
+                                                </div>
+                                                @foreach($question['answers'] as $answer)
+                                                    <div style="margin-bottom: -2%" class="card-body"  data-toggle="collapse">
+                                                        <div class="flex_answer js-edit-answer">
+                                                            <input data-answer="true" data-id="{{$answer['id']}}" data-name="answer" type="text" value="{{$answer['answer']}}" class="form-control inp"><button type="button" data-id="{{$answer['id']}}" class="btn btn-danger delete_answer">Удалить</button></a>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                            <br>
+                                            <button type="button" data-id="{{$question['id']}}" class="btn btn-primary add_answer">Добавить</button>
+                                        @elseif(trim($question['type']) === 'range')
+                                            <div class="card-body">
+                                                <label>Минимальное значение</label>
+                                                <div class="flex_answer js-edit-answer">
+                                                    <input data-answer="true" data-id="{{$question['answers']['id'] ?? ''}}" data-name="min" type="text" value="{{$question['answers']['min'] ?? ''}}" class="form-control inp">
+                                                </div>
+                                                <label>Максимальное значение</label>
+                                                <div class="flex_answer js-edit-answer">
+                                                    <input data-answer="true" data-id="{{$question['answers']['id'] ?? ''}}" data-name="max" type="text" value="{{$question['answers']['max'] ?? ''}}" class="form-control inp">
+                                                </div>
+                                                <label>Начальное значение</label>
+                                                <div class="flex_answer js-edit-answer">
+                                                    <input data-answer="true" data-id="{{$question['answers']['id'] ?? ''}}" data-name="initial_value" type="text" value="{{$question['answers']['initial_value'] ?? '' }}" class="form-control inp">
+                                                </div>
+                                                <label>Шаг</label>
+                                                <div class="flex_answer js-edit-answer">
+                                                    <input data-answer="true" data-id="{{$question['answers']['id'] ?? ''}}" data-name="step" type="text" value="{{$question['answers']['step'] ?? ''}}" class="form-control inp">
+                                                </div>
+                                                <label>Шкала</label>
+                                                <div class="flex_answer js-edit-answer">
+                                                    <input data-answer="true" data-id="{{$question['answers']['id'] ?? ''}}" data-name="division" type="text" value="{{$question['answers']['division'] ?? ''}}" class="form-control inp">
+                                                </div>
+                                            </div>
+                                        @elseif(trim($question['type']) === 'textarea')
+                                            <div class="card-body">
+                                                <label>textarea</label>
+                                            </div>
+                                        @elseif(trim($question['type']) === 'image')
+                                            <div class="card-body">
+                                                <label>image</label>
+                                            </div>
+                                        @elseif(trim($question['type']) === 'file')
+                                            <div class="card-body">
+                                                <label>file</label>
+                                            </div>
+                                        @else
+                                            <br>
+                                            <button type="button" data-id="{{$question['id']}}" class="btn btn-primary add_answer">Добавить ответ</button>
+                                        @endif
                         </div>
                     </div>
             @endif

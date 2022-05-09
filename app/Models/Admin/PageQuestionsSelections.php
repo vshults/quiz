@@ -56,32 +56,49 @@ class PageQuestionsSelections extends Model
 
             foreach ($questions as $question) {
                 if ($question['branch']) {
-                    $answers = $this->answers->where('branch_id', $question['id'])->get()->map(function (Answer $answer) {
-                        return [
-                            'id' => $answer->id,
-                            'question_id' => $answer->question_id,
-                            'branch_id' => $answer->branch_id,
-                            'host_id' => $answer->host_id,
-                            'answer' => $answer->answer,
-                            'selection' => $answer->selection,
-                            'img' => !empty($answer->image_answer) ? Storage::disk('s3')->url($answer->image_answer) : '',
-                        ];
-                    })->toArray();
+                    if(trim($question['type']) === 'radio' || trim($question['type']) === 'checkbox' || trim($question['type']) === 'select') {
+                        $answers = $this->answers->where('branch_id', $question['id'])->get()->map(function (Answer $answer) {
+                            return [
+                                'id'            => $answer->id,
+                                'question_id'   => $answer->question_id,
+                                'branch_id'     => $answer->branch_id,
+                                'host_id'       => $answer->host_id,
+                                'answer'        => $answer->answer,
+                                'selection'     => $answer->selection,
+                                'img'           => !empty($answer->image_answer) ? Storage::disk('s3')->url($answer->image_answer) : '',
+                                'min'           => $answer->min,
+                                'max'           => $answer->max,
+                                'step'          => $answer->step,
+                                'initial_value' => $answer->initial_value,
+                            ];
+                        })->toArray();
+                    }else{
+                        $answers = array_first($this->answers->where('branch_id', $question['id'])->get()->toArray());
+                    }
                 } else {
-                    $answers = $this->answers->where('question_id', $question['id'])->get()->map(function (Answer $answer) {
-                        return [
-                            'id' => $answer->id,
-                            'question_id' => $answer->question_id,
-                            'branch_id' => $answer->branch_id,
-                            'host_id' => $answer->host_id,
-                            'answer' => $answer->answer,
-                            'selection' => $answer->selection,
-                            'img' => !empty($answer->image_answer) ? Storage::disk('s3')->url($answer->image_answer) : '',
-                        ];
-                    })->toArray();
+                    if(trim($question['type']) === 'radio' || trim($question['type']) === 'checkbox' || trim($question['type']) === 'select'){
+                        $answers = $this->answers->where('question_id', $question['id'])->get()->map(function (Answer $answer) {
+                            return [
+                                'id'             => $answer->id,
+                                'question_id'    => $answer->question_id,
+                                'branch_id'      => $answer->branch_id,
+                                'host_id'        => $answer->host_id,
+                                'answer'         => $answer->answer,
+                                'selection'      => $answer->selection,
+                                'img'            => !empty($answer->image_answer) ? Storage::disk('s3')->url($answer->image_answer)  : '',
+                                'min'            => $answer->min,
+                                'max'            => $answer->max,
+                                'step'           => $answer->step,
+                                'initial_value'  => $answer->initial_value,
+                            ];
+                        })->toArray();
+                    }else{
+                        $answers = array_first($this->answers->where('question_id', $question['id'])->get()->toArray());
+                    }
                 }
                 $question['answers'] = $answers;
                 $data[] = $question;
+
             }
         }
 

@@ -11,7 +11,13 @@ class Answer extends Model
         'question_id',
         'branch_id',
         'answer',
-        'image_answer'
+        'image_answer',
+        'min',
+        'max',
+        'step',
+        'initial_value',
+        'mode',
+        'division'
     ];
 
     protected $table     = 'answers';

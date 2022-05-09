@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('content'); ?>
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -33,6 +32,11 @@
                 <select data-id="<?php echo e($id); ?>" class="form-control inp" data-name="type">
                     <option <?php echo e($type === 'radio' ? 'selected' : ''); ?>>radio</option>
                     <option <?php echo e($type === 'checkbox' ? 'selected' : ''); ?>>checkbox</option>
+                    <option <?php echo e($type === 'range' ? 'selected' : ''); ?>>range</option>
+                    <option <?php echo e($type === 'image' ? 'selected' : ''); ?>>checkbox</option>
+                    <option <?php echo e($type === 'file' ? 'selected' : ''); ?>>file</option>
+                    <option <?php echo e($type === 'textarea' ? 'selected' : ''); ?>>textarea</option>
+                    <option <?php echo e($type === 'select' ? 'selected' : ''); ?>>select</option>
                 </select>
                 <br>
                 <label>Статус</label>

@@ -40,6 +40,7 @@ mix.scripts([
     'resources/assets/admin/js/pages/graphs.js',
     'resources/assets/admin/js/jquery.fancybox.js',
     'resources/assets/admin/js/pages/sort.js',
+    'resources/assets/admin/js/sortable.js',
 ],'public/assets/admin/js/main.js');
 
 mix.copyDirectory('resources/assets/admin/plugins/fontawesome-free/webfonts','public/assets/admin/webfonts');

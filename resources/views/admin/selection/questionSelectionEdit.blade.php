@@ -33,6 +33,11 @@
                 <select data-id="{{$id}}" class="form-control inp" data-name="type">
                     <option {{$type === 'radio' ? 'selected' : ''}}>radio</option>
                     <option {{$type === 'checkbox' ? 'selected' : ''}}>checkbox</option>
+                    <option {{$type === 'range' ? 'selected' : ''}}>range</option>
+                    <option {{$type === 'image' ? 'selected' : ''}}>checkbox</option>
+                    <option {{$type === 'file' ? 'selected' : ''}}>file</option>
+                    <option {{$type === 'textarea' ? 'selected' : ''}}>textarea</option>
+                    <option {{$type === 'select' ? 'selected' : ''}}>select</option>
                 </select>
                 <br>
                 <label>Статус</label>

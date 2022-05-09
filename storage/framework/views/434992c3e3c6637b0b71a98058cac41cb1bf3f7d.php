@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
     <style>.btn_delete{margin-left: 30%;margin-right: auto}</style>
     <div class="content-wrapper">

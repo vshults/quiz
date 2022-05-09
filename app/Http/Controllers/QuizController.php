@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\ShowData;
 use App\Models\Ticket;
 use Dotenv\Exception;
+use Illuminate\Support\Facades\Storage;
 
 class QuizController extends Controller
 {
@@ -73,6 +74,16 @@ class QuizController extends Controller
         $questionBranchID  = !empty($request['questionBranchID']) ? $request['questionBranchID'] : null;
         $index             = !empty($request['index']) ? $request['index'] : 0;
         $sortOrder         = isset($request['sort_order']) ? $request['sort_order'] : null;
+        $filenametostore   = '';
+
+        if ($request->hasFile('image')) {
+            $filenametostore = uploadFile($request,'image');
+        }
+
+        if ($request->hasFile('file')) {
+            $filenametostore = uploadFile($request,'file');
+        }
+
         //проверяем есть ли у нас готовые вопросы к этому домену
 
         if ($this->model->hostQuestionsStatus($hostID)) {
@@ -84,11 +95,11 @@ class QuizController extends Controller
 
             //сохраняем выбранные ответы в тикет
             if (!empty($request['answerID']) && $request['required'] || !empty($request['name']) || !empty($request['phone'])) {
-                $ticketID = $this->ticket->saveTicket($request, $hostID, $count, $flag);
+                $ticketID = $this->ticket->saveTicket($request, $hostID, $count, $flag,$filenametostore);
             }
             //если вопрос не обязательный, то пропускаем
             if(isset($request['required']) && !$request['required']){
-                $ticketID = $this->ticket->saveTicket($request, $hostID, $count, $flag);
+                $ticketID = $this->ticket->saveTicket($request, $hostID, $count, $flag,$filenametostore);
             }
 
             $this->ticketID = !empty($ticketID) ? $ticketID : null;

@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
     <style>.table_ticket td{width: 500px} </style>
     <div class="content-wrapper">

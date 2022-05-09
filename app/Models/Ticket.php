@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Eloquent\Tickets;
 use App\Models\ShowData;
 use App\Http\Controllers\MailController;
+use Illuminate\Support\Facades\Storage;
 
 class Ticket extends Model
 {
@@ -24,9 +25,8 @@ class Ticket extends Model
         $this->mail          = new MailController();
     }
 
-    public function saveTicket($request,$hostID,$count,$flag)
+    public function saveTicket($request,$hostID,$count,$flag,$filenametostore)
     {
-
         $ticketID   = !empty($request['ticketID'])     ? $request['ticketID']     : null;
         $QuestionID = !empty($request['questionID'])   ? $request['questionID']   : null;
         $AnswerID   = !empty($request['answerID'])     ? $request['answerID']     : null;
@@ -35,6 +35,8 @@ class Ticket extends Model
         $index      = !empty($request['index'])        ? $request['index']        : null;
         $required   = !empty($request['required'])     ? $request['required']     : null;
         $sort_order = isset($request['sort_order'])    ? $request['sort_order']   : null;
+        $type       = !empty($request['type'])         ? $request['type']         : null;
+        $value      = !empty($request['value'])        ? $request['value']        : null;
 
         if(is_null($sort_order)){
             $sort_order = $this->questions->where('host_id' , $hostID)->pluck('index')->toArray();
@@ -58,22 +60,55 @@ class Ticket extends Model
 
         $questionTitle = !empty($questionTitle) ? $questionTitle[0] : ' ';
 
-        $answerTitle = ' ';
+        $answer = ' ';
+
+        switch ($type) {
+            case 'radio':
+                if(!is_null($AnswerID)){
+                    $answer = array_first($this->answers->where('id',$AnswerID)->pluck('answer')->toArray()) ?? ' ';
+                }
+                break;
+            case 'checkbox':
+                $answers = [];
+                foreach ($AnswerID as $item_id){
+                    $answer    = $this->answers->where('id',$item_id)->pluck('answer')->toArray();
+                    if(!empty($answer)){
+                        $answers[] = $answer[0];
+                    }
+                }
+                $answer = implode(' | ',$answers);
+                break;
+            case 'range':
+                $answer = $value;
+                break;
+            case 'textarea':
+                $answer = $value;
+                break;
+            case 'select':
+                $answer = $value;
+                break;
+            case 'image':
+                $answer = !empty($filenametostore) ? Storage::disk('s3')->url($filenametostore) : '';
+                break;
+            case 'file':
+                $answer = !empty($filenametostore) ? Storage::disk('s3')->url($filenametostore) : '';
+                break;
+        }
 
         if(!is_array($AnswerID)){
             if(!is_null($AnswerID)){
-                $answerTitle = $this->answers->where('id',$AnswerID)->pluck('answer')->toArray();
-                $answerTitle = !empty($answerTitle[0]) ? $answerTitle[0] : ' ';
+                $answer = $this->answers->where('id',$AnswerID)->pluck('answer')->toArray();
+                $answer = !empty($answer[0]) ? $answer[0] : ' ';
             }
         }else{
-            $answerTitles = [];
+            $answers = [];
             foreach ($AnswerID as $item_id){
-                $answerTitle    = $this->answers->where('id',$item_id)->pluck('answer')->toArray();
-                if(!empty($answerTitle)){
-                    $answerTitles[] = $answerTitle[0];
+                $answer    = $this->answers->where('id',$item_id)->pluck('answer')->toArray();
+                if(!empty($answer)){
+                    $answers[] = $answer[0];
                 }
             }
-            $answerTitle = implode(' | ',$answerTitles);
+            $answer = implode(' | ',$answers);
         }
 
         if (!is_null($ticketID)) {
@@ -87,7 +122,7 @@ class Ticket extends Model
             if(!empty($name)){
                 $data = $ticket[0]['data'];
             }else{
-                $data = $ticket[0]['data'] . '{Q:' . $questionTitle . ',A:' . $answerTitle . ',I:' . $index . ',C:' . $count . ',S:' . $sort_order . ',F:' . $flag . ',QID:' . $QuestionID . ',R:' . $required . '}';
+                $data = $ticket[0]['data'] . '{Q:' . $questionTitle . ',A:' . $answer . ',I:' . $index . ',C:' . $count . ',S:' . $sort_order . ',F:' . $flag . ',QID:' . $QuestionID . ',R:' . $required . '}';
             }
 
             $this->tickets->where('id', $ticketID)->update(

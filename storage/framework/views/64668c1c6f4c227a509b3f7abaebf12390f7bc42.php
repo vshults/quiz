@@ -1,31 +1,33 @@
 <?php
-$editHost                 = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/host/edit/host';
-$editSetting              = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/host/edit/setting';
-$editQuestions            = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/host/edit/questions';
-$addHost                  = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/host/addHost';
-$addSettingItem           = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/host/addSettingItem';
-$deleteHost               = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/host/deleteHost';
-$addBranch                = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/host/question/add/branch';
-$addQuestion              = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/host/question/add';
-$deleteQuestion           = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/host/question/delete';
-$addAnswer                = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/host/answer/add';
-$deleteAnswer             = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/host/answer/delete';
-$deleteBranch             = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/host/branch/delete';
-$uploadImage              = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/host/edit/question/uploadImage';
-$tickets                  = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/tickets';
-$addUser                  = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/user/add';
-$editUser                 = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/user/edit';
-$deleteUser               = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/user/delete';
-$sortQuestions            = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/sortQuestions';
-$addSelection             = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/selection/addSelection';
-$deleteSelection          = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/selection/deleteSelection';
-$addQuestionSelection     = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/selection/addQuestionSelection';
-$deleteQuestionSelection  = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/selection/deleteQuestionSelection';
-$addAnswerSelection       = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/selection/answer/add';
-$deleteAnswerSelection    = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/selection/answer/delete';
-$addBranchSelection       = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/selection/add/branch';
-$editSelection            = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/selection/edit';
-$saveSelection            = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin/host/saveSelection';
+$editHost                 = SITE . '/admin/host/edit/host';
+$editSetting              = SITE . '/admin/host/edit/setting';
+$editQuestions            = SITE . '/admin/host/edit/questions';
+$addHost                  = SITE . '/admin/host/addHost';
+$addSettingItem           = SITE . '/admin/host/addSettingItem';
+$deleteHost               = SITE . '/admin/host/deleteHost';
+$addBranch                = SITE . '/admin/host/question/add/branch';
+$addBranchQuestion        = SITE . '/admin/host/question/add/branchQuestion';
+$addQuestion              = SITE . '/admin/host/question/add';
+$deleteQuestion           = SITE . '/admin/host/question/delete';
+$addAnswer                = SITE . '/admin/host/answer/add';
+$deleteAnswer             = SITE . '/admin/host/answer/delete';
+$deleteBranch             = SITE . '/admin/host/branch/delete';
+$deleteBranchQuestion     = SITE . '/admin/host/branchQuestion/delete';
+$uploadImage              = SITE . '/admin/host/edit/question/uploadImage';
+$tickets                  = SITE . '/admin/tickets';
+$addUser                  = SITE . '/admin/user/add';
+$editUser                 = SITE . '/admin/user/edit';
+$deleteUser               = SITE . '/admin/user/delete';
+$sortQuestions            = SITE . '/admin/sortQuestions';
+$addSelection             = SITE . '/admin/selection/addSelection';
+$deleteSelection          = SITE . '/admin/selection/deleteSelection';
+$addQuestionSelection     = SITE . '/admin/selection/addQuestionSelection';
+$deleteQuestionSelection  = SITE . '/admin/selection/deleteQuestionSelection';
+$addAnswerSelection       = SITE . '/admin/selection/answer/add';
+$deleteAnswerSelection    = SITE . '/admin/selection/answer/delete';
+$addBranchSelection       = SITE . '/admin/selection/add/branch';
+$editSelection            = SITE . '/admin/selection/edit';
+$saveSelection            = SITE . '/admin/host/saveSelection';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,7 +39,7 @@ $saveSelection            = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="<?php echo e(asset('assets/admin/css/admin.css')); ?>">
 </head>
-<style>element.style {min-height: auto;}</style>
+<style> element.style {min-height: auto;} .user-panel img{width: 3.1rem;}  .user-panel .info{padding: 2px 5px 5px 10px;}</style>
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
 <div class="wrapper">
@@ -89,7 +91,11 @@ $saveSelection            = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '
             <!-- Sidebar user (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
-                    <img src="<?php echo e(asset('assets/admin/img/user6-128x128.jpg')); ?>" class="img-circle elevation-2" alt="User Image">
+                    <?php if(!empty(Auth::user()->img)): ?>
+                        <img src="<?php echo e(Storage::disk('s3')->url(Auth::user()->img)); ?>" class="img-circle elevation-2" alt="User Image">
+                    <?php else: ?>
+                        <img src="<?php echo e(asset('assets/admin/img/AdminLTELogo.png')); ?>" class="img-circle elevation-2" alt="User Image">
+                    <?php endif; ?>
                 </div>
                 <div class="info">
                     <a class="d-block"><?php echo e(Auth::user()->name); ?></a><a href="/logout" class="d-block">выйти</a>
@@ -215,8 +221,14 @@ $saveSelection            = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '
     addAnswer('<?php echo e($addAnswer); ?>');
     deleteAnswer('<?php echo e($deleteAnswer); ?>');
     addBranch('<?php echo e($addBranch); ?>');
+    addBranchQuestion('<?php echo e($addBranchQuestion); ?>');
     deleteBranch('<?php echo e($deleteBranch); ?>');
-    uploadImageQuestion('<?php echo e($uploadImage); ?>');
+    deleteBranchQuestion('<?php echo e($deleteBranchQuestion); ?>');
+
+    uploadImageQuestion('<?php echo e($editQuestions); ?>');
+    uploadImageAnswer('<?php echo e($editQuestions); ?>');
+    uploadImageUser('<?php echo e($editUser); ?>');
+
 
     editSetting('<?php echo e($editSetting); ?>');
 

@@ -14,10 +14,10 @@ class HostController extends Controller
 {
     public function __construct()
     {
-        $this->pageHosts = new PageHost();
-        $this->pageSetting = new PageSetting();
+        $this->pageHosts     = new PageHost();
+        $this->pageSetting   = new PageSetting();
         $this->pageQuestions = new PageQuestions();
-        $this->save = new SaveChanges();
+        $this->save          = new SaveChanges();
     }
 
     /**
@@ -106,55 +106,27 @@ class HostController extends Controller
             if (!empty($req['answer'])) {
 
                 if ($request->hasFile('image_answer')) {
-
-                    //получаю имя файла с разшерением
-                    $filenamewithextension = $request->file('image_answer')->getClientOriginalName();
-
-                    //получаю имя файла без разширения
-                    $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
-
-                    //получаю разширенеи файла
-                    $extension = $request->file('image_answer')->getClientOriginalExtension();
-
-                    //имя файла для хранения
-                    $filenametostore = $filename . '_' . time() . '.' . $extension;
-
-                    //загружаю файл на s3
-                    Storage::disk('s3')->put($filenametostore, fopen($request->file('image_answer'), 'r+'), 'public');
+                    $filenametostore = uploadFile($request,'image_answer');
                 }
 
                 $this->save->saveChanges($req, 'answer', $filenametostore);
             } else {
 
                 if ($request->hasFile('image_question')) {
-
-                    //получаю имя файла с разшерением
-                    $filenamewithextension = $request->file('image_question')->getClientOriginalName();
-
-                    //получаю имя файла без разширения
-                    $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
-
-                    //получаю разширенеи файла
-                    $extension = $request->file('image_question')->getClientOriginalExtension();
-
-                    //имя файла для хранения
-                    $filenametostore = $filename . '_' . time() . '.' . $extension;
-
-                    //загружаю файл на s3
-                    Storage::disk('s3')->put($filenametostore, fopen($request->file('image_question'), 'r+'), 'public');
+                    $filenametostore = uploadFile($request,'image_question');
                 }
 
                 $this->save->saveChanges($req, 'question_title', $filenametostore);
             }
 
         } else {
-            $hostID = (int)$request->route('id');
-            $data['questions'] = $this->pageQuestions->show($hostID);
+            $hostID             = (int)$request->route('id');
+            $data['questions']  = $this->pageQuestions->show($hostID);
             $data['selections'] = $this->pageQuestions->getSelections();
-            $data['host'] = $this->pageHosts->getHost($hostID);
-            $data['edit'] = SITE . '/admin/host/' . $hostID . '/question/';
+            $data['host']       = $this->pageHosts->getHost($hostID);
+            $data['edit']       = SITE . '/admin/host/' . $hostID . '/question/';
 
-            $data['hostID'] = $hostID;
+            $data['hostID']     = $hostID;
 
             return view('admin.question.editQuestions', $data);
         }

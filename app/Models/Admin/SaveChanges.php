@@ -65,6 +65,7 @@ class SaveChanges extends Model
                 );
                 break;
             case 'question_title':
+
                 if(trim(mb_strtolower($value)) === 'необязательный'){
                     $value = 0;
                 }
@@ -78,6 +79,14 @@ class SaveChanges extends Model
                         $this->answer->where('question_id', $branch)->delete();
                     }
                     deleteAll();
+                }
+
+                if(trim(strtolower($name)) === 'type'){
+                    $this->answer->where('question_id',$id)->delete();
+                }
+
+                if(trim(strtolower($name)) === 'type' && $value === 'range'){
+                    $this->answer->insert(['question_id' => $id]);
                 }
 
                 $this->questions->where('id',$id)->update(

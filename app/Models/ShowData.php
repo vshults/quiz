@@ -125,7 +125,7 @@ class ShowData extends Model
             $data['question']['index'] = $this->index;
         }
 
-        $answers = !empty($question['id']) ? $this->getAnswers($question['id']) : [];
+        $answers = !empty($question['id']) ? $this->getAnswers($question['id'],$question['type']) : [];
 
         $data['question']['answers'] = !empty($answers) ? $answers : [];
 
@@ -206,9 +206,9 @@ class ShowData extends Model
         $this->refreshCountQuestions($hostID, $data['question']['id'],$ticketID);
 
         if($question['branch']){
-            $answers = !empty($question['id']) ? $this->getBranchAnswers($question['id']) : [];
+            $answers = !empty($question['id']) ? $this->getBranchAnswers($question['id'],$question['type']) : [];
         }else{
-            $answers = !empty($question['id']) ? $this->getAnswers($question['id']) : [];
+            $answers = !empty($question['id']) ? $this->getAnswers($question['id'],$question['type']) : [];
         }
 
         $data['question']['answers'] = [];
@@ -232,17 +232,49 @@ class ShowData extends Model
        return  $image;
     }
 
-    public function getAnswers($id)
+    public function getAnswers($id,$type)
     {
-        $results = $this->answers->where('question_id' , $id)->get()
-            ->map(function (Answer $answers) {
-                return [
-                    'id'        => $answers->id,
-                    'name'      => $answers->answer,
-                    'branch_id' => $answers->branch_id,
-                    'img'       => !empty($answers->image_answer) ? Storage::disk('s3')->url($answers->image_answer)  : '' ,
-                ];
-            })->toArray();
+        $results = [];
+
+        switch ($type) {
+            case 'range':
+                $results = $this->answers->where('question_id' , $id)->get()
+                    ->map(function (Answer $answers) {
+                        return ['options' => [
+                            'id'             => (int)$answers->id,
+                            'min'            => (int)$answers->min,
+                            'max'            => (int)$answers->max,
+                            'step'           => (int)$answers->step,
+                            'initial_value'  => (int)$answers->initial_value,
+                            'pips'           => [
+                                'mode'   => $answers->mode,
+                                'values' => !empty($answers->division) ? explode(',' , $answers->division) : [],
+                                ],
+                            ]
+                            ];
+                    })->toArray();
+                break;
+            case 'select':
+                $results = $this->answers->where('question_id' , $id)->get()
+                    ->map(function (Answer $answers) {
+                        return [
+                            'id'             => $answers->id,
+                            'name'           => $answers->answer,
+                        ];
+                    })->toArray();
+                break;
+            default:
+                $results = $this->answers->where('question_id' , $id)->get()
+                    ->map(function (Answer $answers) {
+                        return [
+                            'id'             => $answers->id,
+                            'name'           => $answers->answer,
+                            'branch_id'      => $answers->branch_id,
+                            'img'            => !empty($answers->image_answer) ? Storage::disk('s3')->url($answers->image_answer)  : '' ,
+                        ];
+                    })->toArray();
+                break;
+        }
 
         return $results;
     }
@@ -273,7 +305,7 @@ class ShowData extends Model
         }
 
         $this->refreshCountQuestions($hostID, $data['question']['id'],$ticketID);
-        $answers = !empty($question['id']) ? $this->getBranchAnswers($question['id']) : [];
+        $answers = !empty($question['id']) ? $this->getBranchAnswers($question['id'],$question['type']) : [];
 
         $data['question']['answers'] = [];
 
@@ -284,17 +316,47 @@ class ShowData extends Model
         return $data;
     }
 
-    public function getBranchAnswers($id){
+    public function getBranchAnswers($id,$type){
 
-        $results = $this->answers->where('question_id' , $id)->get()
-            ->map(function (Answer $branchAnswers) {
-                return [
-                    'id'        => $branchAnswers->id,
-                    'name'      => $branchAnswers->answer,
-                    'branch_id' => $branchAnswers->branch_id,
-                    'img'       => !empty($branchAnswers->image_answer) ? Storage::disk('s3')->url($branchAnswers->image_answer)  : '' ,
-                ];
-            })->toArray();
+        switch ($type) {
+            case 'range':
+                $results = $this->answers->where('question_id' , $id)->get()
+                    ->map(function (Answer $branchAnswers) {
+                        return ['options' => [
+                            'id'             => (int)$branchAnswers->id,
+                            'min'            => (int)$branchAnswers->min,
+                            'max'            => (int)$branchAnswers->max,
+                            'step'           => (int)$branchAnswers->step,
+                            'initial_value'  => (int)$branchAnswers->initial_value,
+                            'pips'           => [
+                                'mode'   => $branchAnswers->mode,
+                                'values' => !empty($branchAnswers->division) ? explode(',' , $branchAnswers->division) : [],
+                            ],
+                        ]
+                        ];
+                    })->toArray();
+                break;
+            case 'select':
+                $results = $this->answers->where('question_id' , $id)->get()
+                    ->map(function (Answer $branchAnswers) {
+                        return [
+                            'id'             => $branchAnswers->id,
+                            'name'           => $branchAnswers->answer,
+                        ];
+                    })->toArray();
+                break;
+            default:
+                $results = $this->answers->where('question_id' , $id)->get()
+                    ->map(function (Answer $branchAnswers) {
+                        return [
+                            'id'             => $branchAnswers->id,
+                            'name'           => $branchAnswers->answer,
+                            'branch_id'      => $branchAnswers->branch_id,
+                            'img'            => !empty($branchAnswers->image_answer) ? Storage::disk('s3')->url($branchAnswers->image_answer)  : '' ,
+                        ];
+                    })->toArray();
+                break;
+        }
 
         return $results;
     }
